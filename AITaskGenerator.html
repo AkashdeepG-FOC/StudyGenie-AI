@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Task Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border-radius: 3px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+            outline: none;
+        }
+        
+        input::-webkit-inner-spin-button, 
+        input::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+
+        .task-card {
+            margin-top: 30px;
+            padding: 25px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            background: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            min-height: 100px;
+            max-height: 250px;
+            overflow-y: auto;
+            text-align: left;
+            white-space: pre-wrap;
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+        
+        .task-card strong {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(106, 17, 203, 0.2);
+            border-radius: 50%;
+            border-top-color: #6a11cb;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Custom scrollbar */
+        .task-card::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .task-card::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .task-card::-webkit-scrollbar-thumb {
+            background: #c3cfe2;
+            border-radius: 10px;
+        }
+        
+        .task-card::-webkit-scrollbar-thumb:hover {
+            background: #a1b0cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Generator</h1>
+        <p>Enter available time (in minutes) to get a task suggestion.</p>
+        
+        <div class="input-group">
+            <input type="number" id="timeInput" placeholder="Enter time in minutes" min="1">
+        </div>
+        
+        <button onclick="suggestTask()">Get Task Suggestion</button>
+        <div class="loading" id="loading"></div>
+        <div id="taskOutput" class="task-card"></div>
+        
+        <button onclick="window.location.href='index.html'" class="back-button">Back to Dashboard</button>
+    </div>
+
+    <script>
+        function suggestTask() {
+            const time = document.getElementById("timeInput").value;
+            const output = document.getElementById("taskOutput");
+            const loading = document.getElementById("loading");
+
+            if (!time || time <= 0) {
+                output.innerHTML = "<strong>Error:</strong> Please enter a valid time!";
+                output.style.background = "#ffebee";
+                output.style.borderLeftColor = "#ff416c";
+                return;
+            }
+
+            // Show loading animation
+            loading.style.display = "block";
+            output.innerHTML = "";
+            output.style.background = "#f8f9fa";
+            output.style.borderLeftColor = "transparent";
+
+            // Simulate loading delay
+            setTimeout(() => {
+                loading.style.display = "none";
+                
+                // Local task suggestions based on time ranges
+                const taskSuggestions = {
+                    short: [
+                        "Review your study notes from the last lecture",
+                        "Complete 5 practice problems from your textbook",
+                        "Create flashcards for key terms",
+                        "Watch an educational video on your current topic",
+                        "Organize your study materials and create a to-do list"
+                    ],
+                    medium: [
+                        "Work through a complete book chapter",
+                        "Solve a complex problem set",
+                        "Write a summary of today's learning",
+                        "Create a mind map of the current topic",
+                        "Practice past exam questions"
+                    ],
+                    long: [
+                        "Complete a full practice exam",
+                        "Write a detailed essay on your study topic",
+                        "Create a comprehensive study guide",
+                        "Research and take notes on a new topic",
+                        "Review and revise multiple chapters"
+                    ]
+                };
+
+                let category;
+                if (time <= 30) category = 'short';
+                else if (time <= 60) category = 'medium';
+                else category = 'long';
+
+                const suggestions = taskSuggestions[category];
+                const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+
+                output.innerHTML = `<strong>Task Suggestion:</strong> ${randomSuggestion}`;
+                output.style.background = getRandomGradient();
+                output.style.color = "white";
+                output.style.borderLeftColor = "#6a11cb";
+            }, 1000);
+        }
+
+        function getRandomGradient() {
+            const gradients = [
+                "linear-gradient(135deg, #6a11cb, #2575fc)",
+                "linear-gradient(135deg, #11998e, #38ef7d)",
+                "linear-gradient(135deg, #f093fb, #f5576c)",
+                "linear-gradient(135deg, #4facfe, #00f2fe)",
+                "linear-gradient(135deg, #fa709a, #fee140)"
+            ];
+            return gradients[Math.floor(Math.random() * gradients.length)];
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById("timeInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                suggestTask();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Trivia Quiz Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #2c3e50;
+            text-align: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border-radius: 2px;
+        }
+
+        #quiz-container {
+            margin: auto;
+            padding: 40px;
+            max-width: 700px;
+            width: 90%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+        
+        .select-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .select-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        select, button {
+            padding: 15px;
+            margin: 5px 0;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #a3a3a3;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        select {
+            background: #f8f9fa;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+        
+        select:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+        }
+        
+        #question-container {
+            margin: 30px 0;
+            min-height: 60px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        #question-container h3 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 15px;
+            background: #2d69f6;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-align: left;
+        }
+        
+        .option:hover {
+            background: #1158fe;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        #result {
+            margin: 20px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            min-height: 30px;
+        }
+        
+        .back-button {
+            margin-top: 40px;
+            text-decoration: none;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+        }
+
+        .correct {
+            background: linear-gradient(135deg, #11998e, #38ef7d) !important;
+            color: white !important;
+            border-color: transparent !important;
+        }
+
+        .wrong {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b) !important;
+            color: white !important;
+            border-color: transparent !important;
+        }
+    </style>
+<body>
+
+  <h1>AI Trivia Quiz Game (Offline)</h1>
+
+  <div id="quiz-container">
+    <div class="quiz-header">
+      <div class="select-group">
+        <label for="category">Category:</label>
+        <select id="category">
+          <option value="Science">Science</option>
+          <option value="History">History</option>
+          <option value="Math">Math</option>
+          <option value="Technology">Technology</option>
+          <option value="Geography">Geography</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <button onclick="generateQuestion()">Generate Question</button>
+
+    <div id="question-container"></div>
+    <div id="options-container"></div>
+    <p id="result"></p>
+    <a href="profile.html" class="back-button">Back to Dashboard</a>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        category: "Science",
+        difficulty: "easy",
+        question: "What planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Venus"],
+        answer: "Mars"
+      },
+      {
+        category: "History",
+        difficulty: "medium",
+        question: "Who was the first President of the United States?",
+        options: ["Abraham Lincoln", "George Washington", "John Adams", "Thomas Jefferson"],
+        answer: "George Washington"
+      },
+      {
+        category: "Math",
+        difficulty: "hard",
+        question: "What is the derivative of sin(x)?",
+        options: ["cos(x)", "-cos(x)", "-sin(x)", "tan(x)"],
+        answer: "cos(x)"
+      },
+      {
+        category: "Technology",
+        difficulty: "medium",
+        question: "What does HTML stand for?",
+        options: [
+          "Hyper Trainer Marking Language",
+          "HyperText Markup Language",
+          "HyperText Markdown Language",
+          "Hyperloop Machine Language"
+        ],
+        answer: "HyperText Markup Language"
+      },
+      {
+        category: "Geography",
+        difficulty: "easy",
+        question: "Which is the largest ocean on Earth?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"],
+        answer: "Pacific Ocean"
+      }
+      // Add more offline questions here
+    ];
+
+    const askedQuestions = new Set();
+
+    function generateQuestion() {
+      const category = document.getElementById("category").value;
+      const difficulty = document.getElementById("difficulty").value;
+      const questionContainer = document.getElementById("question-container");
+      const optionsContainer = document.getElementById("options-container");
+      const resultText = document.getElementById("result");
+
+      questionContainer.innerHTML = "<div style='padding: 20px;'>Loading question...</div>";
+      optionsContainer.innerHTML = "";
+      resultText.innerHTML = "";
+
+      const filtered = questions.filter(
+        q => q.category === category && q.difficulty === difficulty && !askedQuestions.has(q.question)
+      );
+
+      if (filtered.length === 0) {
+        questionContainer.innerHTML = "<div style='padding: 20px; color: #ff416c;'>❌ No more questions in this category/difficulty.</div>";
+        return;
+      }
+
+      const selected = filtered[Math.floor(Math.random() * filtered.length)];
+      askedQuestions.add(selected.question);
+      displayQuestion(selected);
+    }
+
+    function displayQuestion(data) {
+      const { question, options, answer } = data;
+      const questionContainer = document.getElementById("question-container");
+      const optionsContainer = document.getElementById("options-container");
+      const resultText = document.getElementById("result");
+
+      questionContainer.innerHTML = `<h3>${question}</h3>`;
+      optionsContainer.innerHTML = "";
+
+      shuffleArray(options).forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerText = option;
+        btn.onclick = () => handleGuess(btn, option, answer);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function handleGuess(button, selectedOption, correctAnswer) {
+      const resultText = document.getElementById("result");
+      if (selectedOption === correctAnswer) {
+        button.classList.add("correct");
+        resultText.innerHTML = "<span style='color: #38ef7d;'>🎉 Correct!</span>";
+        disableOptions();
+      } else {
+        button.classList.add("wrong");
+        resultText.innerHTML = "<span style='color: #ff416c;'>❌ Wrong!</span>";
+        button.disabled = true;
+      }
+    }
+
+    function disableOptions() {
+      document.querySelectorAll(".option").forEach(button => {
+        button.disabled = true;
+      });
+    }
+
+    function shuffleArray(array) {
+      return array.slice().sort(() => Math.random() - 0.5);
+    }
+  </script>
+
+</body>
+</html>

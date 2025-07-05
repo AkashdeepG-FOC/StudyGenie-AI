@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>AI Task Roadmap</title>
+  <style>
+    body {
+      background-color: #f0f2f5;
+      color: #2c3e50;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #3498db;
+      text-align: center;
+      margin-top: 30px;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    #input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    input {
+      width: 60%;
+      height: 55px;
+      font-size: 18px;
+      padding: 0 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      background-color: white;
+      color: #2c3e50;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+      outline: none;
+    }
+
+    button {
+      width: 40%;
+      height: 55px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    #generate-btn {
+      background-color: #3498db;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #generate-btn:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .back-btn {
+      background-color: #e74c3c;
+      color: white;
+      display: block;
+      width: 180px;
+      text-align: center;
+      text-decoration: none;
+      padding: 15px;
+      margin: 30px auto;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    ol {
+      width: 70%;
+      margin: 30px auto;
+      padding: 0;
+      list-style: none;
+      counter-reset: task-counter;
+    }
+
+    li {
+      padding: 20px;
+      margin: 15px 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      counter-increment: task-counter;
+      color: #2c3e50;
+      transition: all 0.3s ease;
+      border-left: 5px solid #3498db;
+    }
+
+    li:hover {
+      transform: translateX(5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    li::before {
+      content: counter(task-counter) ". ";
+      font-weight: bold;
+      color: #3498db;
+      margin-right: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <h2>Task Roadmap Generator</h2>
+
+  <div id="input-container">
+    <input id="aiInput" type="text" placeholder="Enter your goal..." />
+    <div id="suggestions">
+      <button class="suggestion-btn" onclick="fillSuggestion('learn programming')">Learn Programming</button>
+      <button class="suggestion-btn" onclick="fillSuggestion('get fit')">Get Fit</button>
+      <button class="suggestion-btn" onclick="fillSuggestion('start business')">Start Business</button>
+    </div>
+    <button id="generate-btn" onclick="generateTasks()">Generate Roadmap</button>
+  </div>
+
+  <ol id="aiList"></ol>
+
+  <script>
+    const aiInput = document.getElementById("aiInput");
+    const aiList = document.getElementById("aiList");
+
+    // Predefined task templates
+    const taskTemplates = {
+      "learn programming": [
+        "Learn basic programming concepts",
+        "Study variables and data types",
+        "Practice control structures",
+        "Learn functions and methods",
+        "Study object-oriented programming",
+        "Build small projects"
+      ],
+      "get fit": [
+        "Set fitness goals",
+        "Create workout schedule",
+        "Start basic exercises",
+        "Develop healthy eating habits",
+        "Track progress weekly",
+        "Join fitness community"
+      ],
+      "start business": [
+        "Research market needs",
+        "Develop business plan",
+        "Create financial projections",
+        "Register business legally",
+        "Set up operations",
+        "Launch marketing campaign"
+      ]
+    };
+
+    function fillSuggestion(suggestion) {
+      aiInput.value = suggestion;
+      generateTasks();
+    }
+
+    function generateTasks() {
+      const input = aiInput.value.trim().toLowerCase();
+      if (input === "") return;
+      
+      aiList.innerHTML = "";
+      
+      // Get tasks based on input keywords
+      let tasks = [];
+      for (const [key, value] of Object.entries(taskTemplates)) {
+        if (input.includes(key)) {
+          tasks = value;
+          break;
+        }
+      }
+
+      // Default generic tasks if no match found
+      if (tasks.length === 0) {
+        tasks = [
+          "Research and understand the basics",
+          "Create a learning plan",
+          "Gather necessary resources",
+          "Practice fundamentals",
+          "Set measurable goals",
+          "Track progress regularly"
+        ];
+      }
+
+      // Display tasks
+      tasks.forEach(task => {
+        aiList.appendChild(createTaskTag(task));
+      });
+    }
+
+    function createTaskTag(taskName) {
+      const newLi = document.createElement("li");
+      newLi.innerText = taskName;
+      return newLi;
+    }
+  </script>
+
+  <style>
+    #suggestions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .suggestion-btn {
+      background-color: #2ecc71;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .suggestion-btn:hover {
+      background-color: #27ae60;
+      transform: translateY(-2px);
+    }
+  </style>
+</body>
+</html>

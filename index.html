@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudyGenie AI - Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #4cc9f0;
+      --text: #333;
+      --text-light: #666;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e0e6ed 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text);
+    }
+
+    .nav1 {
+      height: 80px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.15);
+      padding: 0 20px;
+    }
+
+    .nav1 h1 {
+      color: white;
+      font-size: 1.8rem;
+      margin: 0;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .nav1 h3 {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1rem;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .container-wrapper {
+      margin-top: 140px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .con {
+      background-color: var(--white);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .con::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+
+    .con:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .con h1 {
+      margin-bottom: 25px;
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+
+    .con input {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: var(--transition);
+      background-color: var(--light-bg);
+    }
+
+    .con input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+
+    .con input:focus + i {
+      color: var(--primary);
+    }
+
+    .con button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 15px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+    }
+
+    .con button:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .con button:active {
+      transform: translateY(1px);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: var(--text-light);
+    }
+
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #e0e0e0;
+    }
+
+    .divider span {
+      padding: 0 15px;
+      font-size: 14px;
+    }
+
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .social-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e0e0e0;
+      background-color: var(--white);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .social-btn:hover {
+      background-color: var(--light-bg);
+      transform: translateY(-3px);
+    }
+
+    .social-btn i {
+      font-size: 20px;
+    }
+
+    .social-btn.google i {
+      color: #DB4437;
+    }
+
+    .social-btn.facebook i {
+      color: #4267B2;
+    }
+
+    .social-btn.twitter i {
+      color: #1DA1F2;
+    }
+
+    .con p {
+      margin-top: 25px;
+      font-size: 15px;
+      color: var(--text-light);
+    }
+
+    .con a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .con a:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+
+    .forgot-password {
+      display: block;
+      text-align: right;
+      margin: 10px 0 20px;
+      font-size: 14px;
+    }
+
+    #errorMessage {
+      background-color: #ffebee;
+      color: #d32f2f;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .decoration {
+      position: absolute;
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .decoration-1 {
+      top: 20%;
+      left: 10%;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--accent), transparent);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .decoration-2 {
+      bottom: 15%;
+      right: 10%;
+      width: 120px;
+      height: 120px;
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      background: linear-gradient(45deg, var(--secondary), transparent);
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(5deg);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav1 h1 {
+        font-size: 1.5rem;
+      }
+      .nav1 h3 {
+        font-size: 0.9rem;
+      }
+      .con {
+        padding: 30px 20px;
+      }
+      .container-wrapper {
+        margin-top: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav1 {
+        height: 70px;
+      }
+      .nav1 h1 {
+        font-size: 1.3rem;
+      }
+      .nav1 h3 {
+        font-size: 0.8rem;
+      }
+      .container-wrapper {
+        margin-top: 100px;
+      }
+      .con h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav1">
+    <h1>StudyGenie AI</h1>
+    <h3>Enhanced Productivity App</h3>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    
+    <div class="con">
+      <h1>Welcome Back</h1>
+      
+      <form id="loginForm">
+        <div class="input-group">
+          <input type="text" name="username" id="username" placeholder="Username or Email" required>
+          <i class="fas fa-user"></i>
+        </div>
+        
+        <div class="input-group">
+          <input type="password" name="password" id="password" placeholder="Password" required>
+          <i class="fas fa-lock"></i>
+        </div>
+        
+        <a href="#" class="forgot-password">Forgot password?</a>
+        
+        <button type="submit">
+          Log in <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+        </button>
+        
+        <div id="errorMessage"></div>
+      </form>
+      
+      <div class="divider">
+        <span>OR</span>
+      </div>
+      
+      <div class="social-login">
+        <div class="social-btn google">
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="social-btn facebook">
+          <i class="fab fa-facebook-f"></i>
+        </div>
+        <div class="social-btn twitter">
+          <i class="fab fa-twitter"></i>
+        </div>
+      </div>
+      
+      <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const errorMessage = document.getElementById("errorMessage");
+      
+      try {
+        const response = await fetch('backend/login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("userToken", data.token);
+          window.location.href = "profile.html";
+        } else {
+          errorMessage.textContent = data.message || "Invalid username or password";
+          errorMessage.style.display = "block";
+        }
+      } catch (error) {
+        errorMessage.textContent = "An error occurred. Please try again later.";
+        errorMessage.style.display = "block";
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>

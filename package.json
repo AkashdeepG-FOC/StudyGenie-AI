@@ -1,0 +1,21 @@
+{
+  "name": "ai-based-virtual-study-planner",
+  "version": "1.0.0",
+  "description": "📚✨ AI-Based Virtual Study Planner\r In a world full of distractions and deadlines, staying focused feels… hard.\r We get it.",
+  "main": "motivational.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shruti627/AI-Based-Virtual-Study-Planner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Shruti627/AI-Based-Virtual-Study-Planner/issues"
+  },
+  "homepage": "https://github.com/Shruti627/AI-Based-Virtual-Study-Planner#readme"
+}
